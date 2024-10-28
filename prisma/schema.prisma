@@ -1,0 +1,56 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+
+model Shop {
+  id        String        @id @default(uuid())
+  name      String
+  address   String
+  barbers   Barber[] @relation("ShopToBarber")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Client {
+  id             String         @id @default(uuid())
+  name           String
+  email          String         @unique
+  phone          String
+  authentication Authentication?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model Authentication {
+  id            String  @id @default(uuid())
+  password      String
+  salt          String
+  sessionToken  String?
+  client        Client  @relation(fields: [clientId], references: [id])
+  clientId      String  @unique
+}
+
+model Barber {
+  id          String        @id @default(uuid())
+  name       String
+  startTime  DateTime  
+  endTime    DateTime  
+  shopId     String
+  shop       Shop      @relation("ShopToBarber",fields: [shopId], references: [id])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([shopId])
+
+}
+
+
+
