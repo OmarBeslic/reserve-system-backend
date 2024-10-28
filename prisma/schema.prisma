@@ -14,7 +14,6 @@ model Shop {
   id        String        @id @default(uuid())
   name      String
   address   String
-  barbers   Barber[] @relation("ShopToBarber")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -38,19 +37,6 @@ model Authentication {
   clientId      String  @unique
 }
 
-model Barber {
-  id          String        @id @default(uuid())
-  name       String
-  startTime  DateTime  
-  endTime    DateTime  
-  shopId     String
-  shop       Shop      @relation("ShopToBarber",fields: [shopId], references: [id])
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-
-  @@index([shopId])
-
-}
 
 
 
