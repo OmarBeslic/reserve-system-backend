@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+
 import express from "express";
 import http from "http";
 import bodyParser from "body-parser";
@@ -7,11 +7,11 @@ import compression from "compression";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import router from "./routes";
+import { config } from "./config";
 
-dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = config.port || 8080;
 const server = http.createServer(app);
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, 

@@ -8,35 +8,29 @@ datasource db {
   url      = env("DATABASE_URL")
   relationMode = "prisma"
 }
-
-
-model Shop {
-  id        String        @id @default(uuid())
-  name      String
-  address   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  CLIENT
+  EMPLOYEE
+  MANAGER
 }
-
-model Client {
-  id             String         @id @default(uuid())
+model User {
+  id             Int            @id @default(autoincrement())
   name           String
   email          String         @unique
   phone          String
-  authentication Authentication?
+  password       String
+  role           Role           @default(CLIENT)
+  permissions    Permission[]   @relation("UserPermissions") 
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
+  } 
+
+model Permission {
+  id             Int            @id @default(autoincrement())
+  name           String         @unique
+  users          User[]         @relation("UserPermissions") 
 }
-
-model Authentication {
-  id            String  @id @default(uuid())
-  password      String
-  salt          String
-  sessionToken  String?
-  client        Client  @relation(fields: [clientId], references: [id])
-  clientId      String  @unique
-}
-
-
 
 
